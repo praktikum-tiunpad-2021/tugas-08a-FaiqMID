@@ -50,7 +50,7 @@ Queue<T> new_queue() {
 template <typename T>
 void enqueue(Queue<T> &q, const T &value, int priority) {
   ElementPtr<T> ptrPrev = nullptr;
-    ElementPtr<T> ptrNext = nullptr;
+    //ElementPtr<T> ptrNext = nullptr;
     ElementPtr<T> pHelp = q.head;
 
     ElementPtr<T> newElement = new Element<T>;  
@@ -58,7 +58,37 @@ void enqueue(Queue<T> &q, const T &value, int priority) {
     newElement->priority = priority;
     newElement->next = nullptr;
     
-    do
+    if (q.head == nullptr && q.tail == nullptr){
+      q.head = newElement;
+      q.tail = newElement;
+    } else
+    {
+      while (newElement->priority <= pHelp->priority)
+      {
+        if(pHelp->next == nullptr){
+          break;
+        }
+        ptrPrev = pHelp;
+        pHelp = pHelp->next;
+      }
+
+        if (pHelp == q.head && newElement->priority > pHelp->priority)
+        {
+          newElement->next = pHelp;
+          q.head = newElement;
+        }
+        else if (pHelp == q.tail && newElement->priority < pHelp->priority)
+        {
+          pHelp->next = newElement;
+          q.tail = newElement;
+        }
+        else {
+          ptrPrev->next = newElement;
+          newElement->next = pHelp;
+        }
+    }
+    
+    /*do
     {
       //cout << "=> loop  newElmdata = " << newElement->data << " newElmPri = " << newElement->priority << " vs pHelpdata = " << pHelp->data << " pHelpPri = " << pHelp->priority << "\n ";
       if (q.head == nullptr && q.tail == nullptr)
@@ -101,7 +131,7 @@ void enqueue(Queue<T> &q, const T &value, int priority) {
       }
 
       pHelp = pHelp->next;
-    } while (pHelp != nullptr && pHelp != q.tail);
+    } while (pHelp != nullptr && pHelp != q.tail);*/
 }
 
 /**
